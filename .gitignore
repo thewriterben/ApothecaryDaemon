@@ -22,20 +22,21 @@ wheels/
 
 # Virtual environments
 venv/
-ENV/
 env/
+ENV/
 
-# IDEs
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
+# PDF Processor outputs
+extracted_herbs.json
+apothecary_generated_code.py
 
 # Test outputs
-*.log
-test_output/
+test_output.json
+herbs_test.json
+
