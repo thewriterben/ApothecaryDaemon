@@ -1,5 +1,11 @@
-# ApothecaryDaemon - No external dependencies required
+# ApothecaryDaemon - Requirements
+
+# Core application - No external dependencies required
 # The application uses only Python standard library (including sqlite3)
+
+# PDF Processing Module
+PyPDF2>=3.0.0  # For PDF text extraction
+pdfplumber>=0.10.0  # Alternative PDF processing with better text extraction
 
 # Optional: For future enhancements
 # requests>=2.31.0  # For API integrations
