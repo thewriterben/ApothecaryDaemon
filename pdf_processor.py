@@ -880,6 +880,11 @@ class AyurvedicParser:
         self.herbs = AYURVEDIC_HERBS
         self.patterns = AYURVEDIC_PATTERNS
     
+    def _find_pattern_matches(self, pattern: str, text: str) -> list:
+        """Helper method to find all pattern matches in text"""
+        matches = re.finditer(pattern, text, re.IGNORECASE)
+        return [match.group(1).lower() for match in matches]
+    
     def parse_dosha_effects(self, text: str) -> Dict[str, str]:
         """Extract dosha balancing/aggravating effects"""
         dosha_effects = {}
@@ -887,17 +892,13 @@ class AyurvedicParser:
         # Pattern for balances/pacifies
         for pattern in [r'(?:Balances?|Pacifies?)\s+(Vata|Pitta|Kapha)', 
                        r'(Vata|Pitta|Kapha)[- ](?:balancing|pacifying)']:
-            matches = re.finditer(pattern, text, re.IGNORECASE)
-            for match in matches:
-                dosha = match.group(1).lower()
+            for dosha in self._find_pattern_matches(pattern, text):
                 dosha_effects[dosha] = 'pacifies'
         
         # Pattern for aggravates
         for pattern in [r'(?:Aggravates?|Increases?)\s+(Vata|Pitta|Kapha)',
                        r'(Vata|Pitta|Kapha)[- ](?:aggravating|increasing)']:
-            matches = re.finditer(pattern, text, re.IGNORECASE)
-            for match in matches:
-                dosha = match.group(1).lower()
+            for dosha in self._find_pattern_matches(pattern, text):
                 dosha_effects[dosha] = 'aggravates'
         
         return dosha_effects
@@ -1155,7 +1156,8 @@ class PDFProcessor:
             if herb.common_names:
                 common_names.extend([n.lower() for n in herb.common_names])
             if herb.sanskrit_name:
-                common_names.append(herb.name.lower() + " (ayurvedic)")
+                # Add "sanskrit_name" as a searchable term if different from herb name
+                common_names.append(f"{herb.sanskrit_name}")
             if herb.pinyin_name:
                 common_names.append(herb.pinyin_name.lower())
             

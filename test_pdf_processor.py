@@ -312,6 +312,7 @@ class TestPDFProcessor(unittest.TestCase):
     
     def test_export_to_json(self):
         """Test JSON export functionality"""
+        import tempfile
         herbs = [
             ExtractedHerb(
                 name="Test Herb",
@@ -319,18 +320,23 @@ class TestPDFProcessor(unittest.TestCase):
                 common_names=["Test"]
             )
         ]
-        test_file = "/tmp/test_export.json"
-        self.processor.export_to_json(herbs, test_file)
+        # Use tempfile for cross-platform compatibility
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+            test_file = f.name
         
-        # Verify file was created and contains valid JSON
-        self.assertTrue(os.path.exists(test_file))
-        with open(test_file, 'r') as f:
-            data = json.load(f)
-        self.assertEqual(len(data), 1)
-        self.assertEqual(data[0]['name'], "Test Herb")
-        
-        # Cleanup
-        os.remove(test_file)
+        try:
+            self.processor.export_to_json(herbs, test_file)
+            
+            # Verify file was created and contains valid JSON
+            self.assertTrue(os.path.exists(test_file))
+            with open(test_file, 'r') as f:
+                data = json.load(f)
+            self.assertEqual(len(data), 1)
+            self.assertEqual(data[0]['name'], "Test Herb")
+        finally:
+            # Cleanup
+            if os.path.exists(test_file):
+                os.remove(test_file)
     
     def test_generate_apothecary_code(self):
         """Test Python code generation for apothecary.py"""
