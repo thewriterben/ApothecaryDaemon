@@ -15,6 +15,7 @@ ApothecaryDaemon is a command-line application designed to check for interaction
 - **Effect Warnings**: Alerts users to unexpected effects (e.g., hallucinations, hyperactivity, anxiety)
 - **Two Modes**: Interactive mode for step-by-step guidance or batch mode for quick checks
 - **Comprehensive Database**: Includes common herbs, supplements, and medications
+- **PDF Processing**: Extract herbal medicine data from PDF documents to expand the database
 
 ## Installation
 
@@ -117,6 +118,189 @@ python3 apothecary.py "ginkgo biloba" "warfarin" "aspirin"
 - `list` - Display all substances in the database
 - `done` - Finish entering substances and check for interactions
 - `quit` - Exit the application
+
+## PDF Processing Module
+
+ApothecaryDaemon includes a powerful PDF processing module that can extract herbal medicine data from PDF documents. This allows you to automatically build and expand the substance database from reference materials.
+
+### Installation
+
+The PDF processing module requires additional dependencies:
+
+```bash
+# Install PDF processing dependencies
+pip install -r requirements.txt
+```
+
+**For OCR support (scanned PDFs)**, you'll also need system dependencies:
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install tesseract-ocr poppler-utils
+```
+
+**macOS:**
+```bash
+brew install tesseract poppler
+```
+
+**Windows:**
+- Download and install Tesseract from: https://github.com/UB-Mannheim/tesseract/wiki
+- Download and install Poppler from: https://github.com/oschwartz10612/poppler-windows/releases
+
+### Features
+
+The PDF processor can:
+- Extract text from multiple PDF formats (text-based and scanned)
+- Automatically detect medical traditions (Ayurveda, TCM, Western, African, Latin American, etc.)
+- Identify known herbs and their scientific names
+- Extract traditional uses, contraindications, and drug interactions
+- Export data to JSON format
+- Generate Python code for integration into `apothecary.py`
+- Handle missing dependencies gracefully
+
+### Usage
+
+#### Basic Usage
+
+Process all PDFs in the current directory:
+
+```bash
+python pdf_processor.py
+```
+
+This will:
+1. Scan for all `.pdf` files in the current directory
+2. Extract text using available methods (pdfplumber → PyPDF2 → OCR)
+3. Identify known herbs and extract their information
+4. Export results to `extracted_herbs.json`
+
+#### Process Specific Directory
+
+```bash
+python pdf_processor.py --directory ./docs
+```
+
+#### Custom Output File
+
+```bash
+python pdf_processor.py --output my_herbs.json
+```
+
+#### Generate Python Code
+
+Generate code that can be integrated into `apothecary.py`:
+
+```bash
+python pdf_processor.py --generate-code
+```
+
+This creates `apothecary_generated_code.py` with substance definitions ready to add to the database.
+
+#### Verbose Output
+
+```bash
+python pdf_processor.py --verbose
+```
+
+### Command Line Options
+
+- `-d`, `--directory` - Directory containing PDF files (default: current directory)
+- `-o`, `--output` - Output JSON file path (default: `extracted_herbs.json`)
+- `-g`, `--generate-code` - Generate Python code for apothecary.py integration
+- `-v`, `--verbose` - Enable verbose logging
+
+### Example Output
+
+```
+Processing PDFs in: /path/to/pdfs
+Available PDF libraries: pdfplumber, PyPDF2
+Found 23 PDF files to process
+
+Processing: Ayurveda_EDL_list_final.pdf
+Detected tradition: Ayurveda
+Found 15 herbs in Ayurveda_EDL_list_final.pdf
+
+Processing: Traditional_Chinese_Medicine_08-03-2015.pdf
+Detected tradition: Traditional Chinese Medicine
+Found 12 herbs in Traditional_Chinese_Medicine_08-03-2015.pdf
+
+...
+
+Total unique herbs extracted: 45
+
+✓ Exported 45 herbs to extracted_herbs.json
+
+Summary:
+  Total herbs extracted: 45
+
+By tradition:
+  Ayurveda: 18
+  Traditional Chinese Medicine: 12
+  Mediterranean/European: 8
+  Latin American: 4
+  African: 3
+
+✓ Processing complete!
+```
+
+### Supported Medical Traditions
+
+The processor automatically detects medical traditions from filenames:
+
+- **Ayurveda**: Files containing "ayurved" or "ayurvedic"
+- **Traditional Chinese Medicine (TCM)**: Files with "tcm" or "chinese"
+- **Mediterranean/European**: Files with "mediterranean" or "european"
+- **African**: Files with "african"
+- **Latin American**: Files with "latin", "mexican", "dominican", or "south america"
+- **Native American**: Files with "native american"
+- **General**: Files that don't match any specific tradition
+
+### Known Herbs Database
+
+The processor includes a built-in dictionary of 30+ known herbs with their scientific names, including:
+
+- St. John's Wort (Hypericum perforatum)
+- Valerian (Valeriana officinalis)
+- Ginkgo Biloba (Ginkgo biloba)
+- Turmeric (Curcuma longa)
+- Ashwagandha (Withania somnifera)
+- Ginseng (Panax ginseng)
+- And many more...
+
+### Integration with ApothecaryDaemon
+
+To integrate extracted herbs into the main application:
+
+1. Run the PDF processor with code generation:
+   ```bash
+   python pdf_processor.py --generate-code
+   ```
+
+2. Open the generated `apothecary_generated_code.py` file
+
+3. Copy the substance definitions
+
+4. Add them to the `_initialize_database()` method in `apothecary.py`
+
+5. Optionally, add interaction data for the new herbs
+
+### Troubleshooting
+
+**No text extracted from PDFs:**
+- Try installing all PDF libraries: `pip install pdfplumber PyPDF2 pytesseract pdf2image Pillow`
+- For scanned PDFs, ensure Tesseract OCR is installed system-wide
+- Use `--verbose` flag to see detailed error messages
+
+**OCR not working:**
+- Verify Tesseract is installed: `tesseract --version`
+- Verify Poppler is installed (for pdf2image)
+- Check that the PDF contains actual scanned images
+
+**Import errors:**
+- The module will work with just PyPDF2 or pdfplumber
+- OCR libraries are optional and only needed for scanned PDFs
+- Install dependencies: `pip install -r requirements.txt`
 
 ## Interaction Severity Levels
 

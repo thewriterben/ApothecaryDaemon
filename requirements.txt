@@ -1,5 +1,16 @@
-# ApothecaryDaemon - No external dependencies required
-# The application uses only Python standard library (including sqlite3)
+# ApothecaryDaemon - Core application dependencies
+# The main application (apothecary.py) uses only Python standard library
 
-# Optional: For future enhancements
-# requests>=2.31.0  # For API integrations
+# PDF Processing Dependencies
+# Install these for PDF extraction features
+PyPDF2>=3.0.0
+pdfplumber>=0.10.0
+
+# OCR Support (for scanned PDFs)
+# Optional - required only for scanned/image-based PDFs
+pytesseract>=0.3.10
+pdf2image>=1.16.0
+Pillow>=10.0.0
+
+# Optional: For downloading external PDFs
+requests>=2.31.0
