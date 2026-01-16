@@ -11,7 +11,6 @@ professional medical advice. Always consult with a healthcare provider before
 combining supplements and medications.
 """
 
-import json
 import sys
 from typing import List, Dict, Set, Optional
 from dataclasses import dataclass
@@ -49,6 +48,14 @@ class Interaction:
 
 class InteractionDatabase:
     """Database of substances and their interactions"""
+    
+    # Severity order for sorting (minor to severe)
+    SEVERITY_ORDER = [
+        InteractionSeverity.MINOR.value,
+        InteractionSeverity.MODERATE.value,
+        InteractionSeverity.MAJOR.value,
+        InteractionSeverity.SEVERE.value
+    ]
     
     def __init__(self):
         self.substances: Dict[str, Substance] = {}
@@ -296,10 +303,7 @@ class InteractionDatabase:
                 found_interactions.append(interaction)
         
         return sorted(found_interactions, 
-                     key=lambda x: [InteractionSeverity.MINOR.value, 
-                                   InteractionSeverity.MODERATE.value, 
-                                   InteractionSeverity.MAJOR.value, 
-                                   InteractionSeverity.SEVERE.value].index(x.severity.value),
+                     key=lambda x: self.SEVERITY_ORDER.index(x.severity.value),
                      reverse=True)
 
 
