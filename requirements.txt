@@ -1,0 +1,6 @@
+# ApothecaryDaemon - No external dependencies required for basic functionality
+# The application uses only Python standard library
+
+# Optional: For future enhancements
+# requests>=2.31.0  # For API integrations
+# sqlite3  # Included in Python standard library
