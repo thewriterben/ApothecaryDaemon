@@ -373,20 +373,22 @@ The application specifically helps prevent unwanted effects such as:
 ```
 ApothecaryDaemon/
 ├── apothecary.py           # Main interaction checker application
-├── pdf_processor.py        # NEW: PDF processing & herb recognition module
-├── test_pdf_processor.py   # NEW: Comprehensive test suite
-├── PDF_PROCESSOR_README.md # NEW: PDF processor documentation
+├── pdf_processor.py        # PDF processing & herb recognition module
+├── test_pdf_processor.py   # Comprehensive test suite
+├── example_pdf_processor.py # Example usage demonstration
+├── PDF_PROCESSOR_README.md # PDF processor documentation
+├── EXAMPLES.md             # Usage examples and scenarios
 ├── requirements.txt        # Python dependencies
-├── README.md              # This file
-└── LICENSE                # License information
+├── README.md               # This file
+└── LICENSE                 # License information
 ```
 
-## PDF Processor Module (NEW!)
+## PDF Processor Module
 
-The repository now includes a comprehensive PDF processing module for herb recognition across three major medical traditions:
+The repository includes a comprehensive PDF processing module for herb recognition across three major medical traditions:
 
 ### Features
-- **120+ herbs** across Western (58), Ayurvedic (32), and TCM (39) traditions
+- **120 herbs** across Western (58), Ayurvedic (32), and TCM (39) traditions
 - **Ayurvedic support**: Sanskrit names (Devanagari), doshas, rasas, virya, vipaka
 - **TCM support**: Pinyin names, Chinese characters (汉字), channels, temperature, taste, actions
 - **Smart cross-referencing**: Herbs appearing in multiple traditions are intelligently merged
@@ -431,7 +433,6 @@ Contributions are welcome! Please ensure that:
 
 ### Future Enhancements
 - Expanded substance database
-- PDF processing integration for medical literature
 - Integration with drug interaction APIs
 - Export interaction reports
 - Multi-language support
