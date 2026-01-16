@@ -464,6 +464,47 @@ class PDFProcessor:
         
         logger.info(f"Exported {len(herbs_list)} herbs to {output_path}")
     
+    def _truncate_at_word_boundary(self, text: str, max_length: int) -> str:
+        """
+        Truncate text at word boundary without breaking words
+        
+        Args:
+            text: Text to truncate
+            max_length: Maximum length
+        
+        Returns:
+            Truncated text
+        """
+        if len(text) <= max_length:
+            return text
+        
+        # Find the last space before max_length
+        truncated = text[:max_length]
+        last_space = truncated.rfind(' ')
+        
+        if last_space > 0:
+            return truncated[:last_space]
+        else:
+            # No space found, return up to max_length
+            return truncated
+    
+    def _escape_string(self, text: str) -> str:
+        """
+        Escape special characters for Python string literals
+        
+        Args:
+            text: Text to escape
+        
+        Returns:
+            Escaped text
+        """
+        # Replace backslashes first, then quotes
+        text = text.replace('\\', '\\\\')
+        text = text.replace('"', '\\"')
+        text = text.replace('\n', ' ')
+        text = text.replace('\r', '')
+        return text
+    
     def generate_python_code(self) -> str:
         """
         Generate Python code that can be added to apothecary.py
@@ -490,7 +531,7 @@ class PDFProcessor:
                 # Clean up the use text
                 cleaned_use = use.split(',')[0].strip()
                 if len(cleaned_use) < 50:
-                    primary_effects.append(cleaned_use)
+                    primary_effects.append(self._escape_string(cleaned_use))
             
             if not primary_effects:
                 primary_effects = ["traditional medicine"]
@@ -498,16 +539,19 @@ class PDFProcessor:
             # Create description
             description = f"Herb from {herb.tradition}"
             if herb.traditional_uses:
-                first_use = herb.traditional_uses[0][:100]
+                first_use = self._truncate_at_word_boundary(herb.traditional_uses[0], 100)
                 description = f"Used in {herb.tradition} for {first_use}"
+            
+            # Escape description
+            description = self._escape_string(self._truncate_at_word_boundary(description, 150))
             
             code_lines.extend([
                 "self._add_substance(Substance(",
-                f"    name=\"{herb.name}\",",
+                f"    name=\"{self._escape_string(herb.name)}\",",
                 f"    category=\"herb\",",
                 f"    common_names={common_names[:5]},",  # Limit to 5 names
                 f"    primary_effects={primary_effects[:3]},",  # Limit to 3 effects
-                f"    description=\"{description[:150]}\"",
+                f"    description=\"{description}\"",
                 "))",
                 "",
             ])
