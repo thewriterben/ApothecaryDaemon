@@ -7,7 +7,7 @@ The PDF Processor module provides comprehensive herb recognition and extraction 
 - **Ayurvedic Medicine** (32 herbs with Sanskrit names)
 - **Traditional Chinese Medicine (TCM)** (39 herbs with Pinyin and Chinese characters)
 
-Total: **120+ unique herbs** with cross-referencing between traditions.
+Total: **120 unique herbs** (after cross-referencing between traditions).
 
 ## Features
 
@@ -249,11 +249,11 @@ pdfplumber>=0.10.0  # Alternative PDF processing
 ## Statistics
 
 Current herb database statistics:
-- **Total herbs**: 120+
-- **Western herbs**: 58
-- **Ayurvedic herbs**: 32
-- **TCM herbs**: 39
-- **Mixed tradition herbs**: 8 (cross-referenced)
+- **Total herbs**: 120 (after merging and cross-referencing)
+- **Western herbs**: 58 (in KNOWN_HERBS dictionary)
+- **Ayurvedic herbs**: 32 (in AYURVEDIC_HERBS dictionary)
+- **TCM herbs**: 39 (in TCM_HERBS dictionary)
+- **Mixed tradition herbs**: 8 (cross-referenced across traditions)
 
 ## Future Enhancements
 
