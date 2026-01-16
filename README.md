@@ -188,10 +188,53 @@ The application specifically helps prevent unwanted effects such as:
 ### Project Structure
 ```
 ApothecaryDaemon/
-├── apothecary.py       # Main application
-├── requirements.txt    # Python dependencies
-├── README.md          # This file
-└── LICENSE            # License information
+├── apothecary.py           # Main interaction checker application
+├── pdf_processor.py        # NEW: PDF processing & herb recognition module
+├── test_pdf_processor.py   # NEW: Comprehensive test suite
+├── PDF_PROCESSOR_README.md # NEW: PDF processor documentation
+├── requirements.txt        # Python dependencies
+├── README.md              # This file
+└── LICENSE                # License information
+```
+
+## PDF Processor Module (NEW!)
+
+The repository now includes a comprehensive PDF processing module for herb recognition across three major medical traditions:
+
+### Features
+- **120+ herbs** across Western (58), Ayurvedic (32), and TCM (39) traditions
+- **Ayurvedic support**: Sanskrit names (Devanagari), doshas, rasas, virya, vipaka
+- **TCM support**: Pinyin names, Chinese characters (汉字), channels, temperature, taste, actions
+- **Smart cross-referencing**: Herbs appearing in multiple traditions are intelligently merged
+- **JSON export**: Export extracted herb data with tradition-specific properties
+- **Code generation**: Generate Python code for integration with apothecary.py
+- **38 comprehensive tests**: Full test coverage with all tests passing
+
+### Quick Start
+```python
+from pdf_processor import PDFProcessor
+
+processor = PDFProcessor()
+stats = processor.get_herb_statistics()
+print(f"Total herbs: {stats['total_herbs']}")  # 120+
+
+# Extract herbs from text
+text = "Ashwagandha balances Vata dosha. Huang Qi tonifies Qi."
+herbs = processor.extract_herbs_from_text(text)
+for herb in herbs:
+    print(f"{herb.name} ({herb.tradition})")
+```
+
+For detailed documentation, see [PDF_PROCESSOR_README.md](PDF_PROCESSOR_README.md)
+
+### Sample Herbs by Tradition
+
+**Western**: Feverfew, Butterbur, Skullcap, Lemon Balm, Nettle, Dandelion, Holy Basil...
+
+**Ayurvedic**: Ashwagandha (अश्वगंधा), Tulsi (तुलसी), Brahmi (ब्राह्मी), Shatavari (शतावरी)...
+
+**TCM**: Ren Shen (人参), Huang Qi (黄芪), Gan Cao (甘草), Dang Gui (当归)...
+
 ```
 
 ### Contributing
@@ -204,6 +247,7 @@ Contributions are welcome! Please ensure that:
 
 ### Future Enhancements
 - Expanded substance database
+- PDF processing integration for medical literature
 - Integration with drug interaction APIs
 - Export interaction reports
 - Multi-language support
