@@ -20,29 +20,10 @@ from enum import Enum
 
 class InteractionSeverity(Enum):
     """Severity levels for interactions"""
-    MINOR = "minor"
-    MODERATE = "moderate"
-    MAJOR = "major"
-    SEVERE = "severe"
-
-
-class EffectType(Enum):
-    """Types of effects that can occur"""
-    RELAXATION = "relaxation"
-    STIMULATION = "stimulation"
-    SEDATION = "sedation"
-    HALLUCINATION = "hallucination"
-    ANXIETY = "anxiety"
-    DEPRESSION = "depression"
-    EUPHORIA = "euphoria"
-    HYPERACTIVITY = "hyperactivity"
-    DROWSINESS = "drowsiness"
-    NAUSEA = "nausea"
-    BLOOD_PRESSURE_INCREASE = "blood_pressure_increase"
-    BLOOD_PRESSURE_DECREASE = "blood_pressure_decrease"
-    BLEEDING_RISK = "bleeding_risk"
-    LIVER_DAMAGE = "liver_damage"
-    SEROTONIN_SYNDROME = "serotonin_syndrome"
+    MINOR = "minor"  # Low-risk interactions requiring only monitoring
+    MODERATE = "moderate"  # Significant interactions requiring caution and possible dose adjustment
+    MAJOR = "major"  # Serious interactions that should be avoided without medical supervision
+    SEVERE = "severe"  # Life-threatening interactions requiring immediate medical attention
 
 
 @dataclass
@@ -315,12 +296,23 @@ class InteractionDatabase:
                 found_interactions.append(interaction)
         
         return sorted(found_interactions, 
-                     key=lambda x: ["minor", "moderate", "major", "severe"].index(x.severity.value),
+                     key=lambda x: [InteractionSeverity.MINOR.value, 
+                                   InteractionSeverity.MODERATE.value, 
+                                   InteractionSeverity.MAJOR.value, 
+                                   InteractionSeverity.SEVERE.value].index(x.severity.value),
                      reverse=True)
 
 
 class ApothecaryDaemon:
     """Main application class"""
+    
+    # Severity symbols for display
+    SEVERITY_SYMBOLS = {
+        InteractionSeverity.MINOR: "ℹ️ ",
+        InteractionSeverity.MODERATE: "⚠️ ",
+        InteractionSeverity.MAJOR: "⛔",
+        InteractionSeverity.SEVERE: "🚨"
+    }
     
     def __init__(self):
         self.db = InteractionDatabase()
@@ -348,14 +340,7 @@ class ApothecaryDaemon:
     
     def display_interaction(self, interaction: Interaction):
         """Display an interaction warning"""
-        severity_symbols = {
-            InteractionSeverity.MINOR: "ℹ️ ",
-            InteractionSeverity.MODERATE: "⚠️ ",
-            InteractionSeverity.MAJOR: "⛔",
-            InteractionSeverity.SEVERE: "🚨"
-        }
-        
-        symbol = severity_symbols.get(interaction.severity, "⚠️ ")
+        symbol = self.SEVERITY_SYMBOLS.get(interaction.severity, "⚠️ ")
         
         print(f"\n{symbol} {interaction.severity.value.upper()} INTERACTION")
         print(f"   Between: {interaction.substance1} + {interaction.substance2}")
