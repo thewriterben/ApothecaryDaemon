@@ -6,10 +6,16 @@ This module provides comprehensive herb recognition and extraction capabilities
 for Western, Ayurvedic, and Traditional Chinese Medicine (TCM) traditions.
 """
 
+import os
 import re
+import sys
 import json
+import argparse
+import logging
+from pathlib import Path
 from dataclasses import dataclass, field, asdict
 from typing import List, Dict, Optional, Set
+from collections import defaultdict
 from enum import Enum
 
 
@@ -19,18 +25,6 @@ class MedicineTradition(Enum):
     AYURVEDIC = "ayurvedic"
     TCM = "tcm"
     MIXED = "mixed"
-
-
-import os
-import re
-import sys
-import json
-import argparse
-import logging
-from pathlib import Path
-from typing import List, Dict, Optional, Set
-from dataclasses import dataclass, asdict, field
-from collections import defaultdict
 
 # Optional imports with graceful degradation
 try:
